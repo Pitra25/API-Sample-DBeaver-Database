@@ -29,9 +29,13 @@ func NewAlbumHandler(service *service.Service) *Album {
 // @Router /albums [get]
 func (h *Album) GET_Albums(c *gin.Context) {
 	logrus.Debug("handler")
+
 	result, err := h.s.Album.Get()
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "albums not found", messages.Error)
 		return
 	}
 
@@ -50,13 +54,16 @@ func (h *Album) GET_Albums(c *gin.Context) {
 func (h *Album) GET_AlbumById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.Album.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "album not found", messages.Error)
 		return
 	}
 
@@ -76,13 +83,13 @@ func (h *Album) GET_AlbumById(c *gin.Context) {
 func (h *Album) POST_Album(c *gin.Context) {
 	var album models.AlbumInput
 	if err := c.BindJSON(&album); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.Album.Create(&album)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -106,18 +113,18 @@ func (h *Album) POST_Album(c *gin.Context) {
 func (h *Album) PUT_Album(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	var album models.AlbumInput
 	if err := c.BindJSON(&album); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	if err := h.s.Album.Put(&album, id); err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -137,13 +144,13 @@ func (h *Album) PUT_Album(c *gin.Context) {
 func (h *Album) DEL_AlbumById(c *gin.Context) {
 	idAlbum, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	err = h.s.Album.Delete(idAlbum)
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
@@ -162,13 +169,13 @@ func (h *Album) DEL_AlbumById(c *gin.Context) {
 func (h *Track) GET_TrackAlbumById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.Track.GetAlbumById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -188,25 +195,25 @@ func (h *Track) GET_TrackAlbumById(c *gin.Context) {
 func (h *Track) POST_TrackAlbumById(c *gin.Context) {
 	id_album, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	_, err = h.s.Album.GetById(id_album)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
 	var track models.TrackInput
 	if err := c.BindJSON(&track); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.Track.CreateAlbumById(&track, id_album)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 

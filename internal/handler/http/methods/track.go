@@ -28,9 +28,13 @@ func NewTrackHandler(service *service.Service) *Track {
 // @Failure 500 {object} messages.Message "Internal server error"
 // @Router /tracks [get]
 func (h *Track) GET_Tracks(c *gin.Context) {
+
 	result, err := h.s.Track.Get()
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "tracks not found", messages.Error)
 		return
 	}
 
@@ -49,13 +53,16 @@ func (h *Track) GET_Tracks(c *gin.Context) {
 func (h *Track) GET_TrackById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.Track.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "track not found", messages.Error)
 		return
 	}
 
@@ -75,13 +82,13 @@ func (h *Track) GET_TrackById(c *gin.Context) {
 func (h *Track) POST_Track(c *gin.Context) {
 	var track models.TrackInput
 	if err := c.BindJSON(&track); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.Track.Create(&track)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -105,18 +112,18 @@ func (h *Track) POST_Track(c *gin.Context) {
 func (h *Track) PUT_Track(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	var track models.TrackInput
 	if err := c.BindJSON(&track); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	if err := h.s.Track.Put(&track, id); err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -136,13 +143,13 @@ func (h *Track) PUT_Track(c *gin.Context) {
 func (h *Track) DEL_TrackById(c *gin.Context) {
 	track_id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	err = h.s.Track.Delete(track_id)
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 

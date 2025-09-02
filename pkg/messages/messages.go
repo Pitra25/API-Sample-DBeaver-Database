@@ -19,6 +19,7 @@ const (
 	Info Level = iota
 	Fatal
 	Warning
+	Error
 )
 
 func New(c *gin.Context, statusCode int, message string, typeM Level) {
@@ -36,6 +37,11 @@ func New(c *gin.Context, statusCode int, message string, typeM Level) {
 	case Warning:
 		{
 			logrus.Warn(message)
+			break
+		}
+	case Error:
+		{
+			logrus.Error(message)
 			break
 		}
 	}

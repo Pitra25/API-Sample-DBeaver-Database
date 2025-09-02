@@ -28,9 +28,13 @@ func NewPlayListHandler(service *service.Service) *PlayList {
 // @Failure 500 {object} messages.Message "Internal server error"
 // @Router /playlists [get]
 func (h *PlayList) GET_PlayLists(c *gin.Context) {
+
 	result, err := h.s.Playlist.Get()
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "play lists not found", messages.Error)
 		return
 	}
 
@@ -50,13 +54,16 @@ func (h *PlayList) GET_PlayLists(c *gin.Context) {
 func (h *PlayList) GET_PlayListById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.Playlist.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "media type not found", messages.Error)
 		return
 	}
 
@@ -77,13 +84,13 @@ func (h *PlayList) GET_PlayListById(c *gin.Context) {
 func (h *PlayList) POST_PlayList(c *gin.Context) {
 	var playlist models.PlaylistInput
 	if err := c.BindJSON(&playlist); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.Playlist.Create(&playlist)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -108,18 +115,18 @@ func (h *PlayList) POST_PlayList(c *gin.Context) {
 func (h *PlayList) PUT_PlayList(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	var playList models.PlaylistInput
 	if err := c.BindJSON(&playList); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	if err := h.s.Playlist.Put(&playList, id); err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -140,13 +147,13 @@ func (h *PlayList) PUT_PlayList(c *gin.Context) {
 func (h *PlayList) DEL_PlayListById(c *gin.Context) {
 	playList_id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	err = h.s.Playlist.Delete(playList_id)
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 

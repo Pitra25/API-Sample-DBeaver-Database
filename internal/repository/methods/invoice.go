@@ -49,6 +49,9 @@ func (m *InvoiceDB) Get() (*[]models.Invoice, error) {
 			&invoice.BillingPostalCode,
 			&invoice.Total,
 		); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
 			return nil, err
 		}
 		results = append(results, invoice)
@@ -83,6 +86,9 @@ func (m *InvoiceDB) GetById(id int) (*models.Invoice, error) {
 		&results.BillingPostalCode,
 		&results.Total,
 	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 

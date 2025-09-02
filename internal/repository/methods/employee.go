@@ -57,6 +57,9 @@ func (m *EmployeeDB) Get() (*[]models.Employee, error) {
 			&employee.Fax,
 			&employee.Email,
 		); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
 			return nil, err
 		}
 		results = append(results, employee)

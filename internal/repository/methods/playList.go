@@ -41,6 +41,9 @@ func (m *PlayListDB) Get() (*[]models.Playlist, error) {
 			&playlist.PlaylistId,
 			&playlist.Name,
 		); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
 			return nil, err
 		}
 		results = append(results, playlist)
@@ -68,6 +71,9 @@ func (m *PlayListDB) GetById(id int) (*models.Playlist, error) {
 		&results.PlaylistId,
 		&results.Name,
 	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 

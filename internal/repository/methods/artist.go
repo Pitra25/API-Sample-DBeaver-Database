@@ -43,6 +43,9 @@ func (m *ArtistDB) Get() (*[]models.Artist, error) {
 			&artist.ArtistId,
 			&artist.Name,
 		); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
 			return nil, err
 		}
 		results = append(results, artist)

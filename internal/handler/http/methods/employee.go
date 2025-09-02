@@ -28,9 +28,13 @@ func NewEmployeeHandler(service *service.Service) *Employee {
 // @Failure 500 {object} messages.Message "Internal server error"
 // @Router /employees [get]
 func (h *Employee) GET_Employees(c *gin.Context) {
+
 	result, err := h.s.Employee.Get()
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "employee not found", messages.Error)
 		return
 	}
 
@@ -50,13 +54,16 @@ func (h *Employee) GET_Employees(c *gin.Context) {
 func (h *Employee) GET_EmployeeById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.Employee.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "employee not found", messages.Error)
 		return
 	}
 
@@ -77,13 +84,13 @@ func (h *Employee) GET_EmployeeById(c *gin.Context) {
 func (h *Employee) POST_Employee(c *gin.Context) {
 	var employee models.EmployeeInput
 	if err := c.BindJSON(&employee); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.Employee.Create(&employee)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -108,18 +115,18 @@ func (h *Employee) POST_Employee(c *gin.Context) {
 func (h *Employee) PUT_Employee(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	var employee models.EmployeeInput
 	if err := c.BindJSON(&employee); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	if err := h.s.Employee.Put(&employee, id); err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -140,13 +147,13 @@ func (h *Employee) PUT_Employee(c *gin.Context) {
 func (h *Employee) DEL_EmployeeById(c *gin.Context) {
 	employee_id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	err = h.s.Employee.Delete(employee_id)
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 

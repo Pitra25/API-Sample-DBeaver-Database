@@ -28,9 +28,13 @@ func NewMediaTypeHandler(service *service.Service) *MediaType {
 // @Failure 500 {object} messages.Message "Internal server error"
 // @Router /mediaTypes [get]
 func (h *MediaType) GET_MediaTypes(c *gin.Context) {
+
 	result, err := h.s.MediaType.Get()
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "media types not found", messages.Error)
 		return
 	}
 
@@ -50,13 +54,16 @@ func (h *MediaType) GET_MediaTypes(c *gin.Context) {
 func (h *MediaType) GET_MediaTypeById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.MediaType.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "media type not found", messages.Error)
 		return
 	}
 
@@ -77,13 +84,13 @@ func (h *MediaType) GET_MediaTypeById(c *gin.Context) {
 func (h *MediaType) POST_MediaType(c *gin.Context) {
 	var mediaType models.MediaTypeInput
 	if err := c.BindJSON(&mediaType); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.MediaType.Create(&mediaType)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -108,18 +115,18 @@ func (h *MediaType) POST_MediaType(c *gin.Context) {
 func (h *MediaType) PUT_MediaType(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	var mediaType models.MediaTypeInput
 	if err := c.BindJSON(&mediaType); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	if err := h.s.MediaType.Put(&mediaType, id); err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -140,13 +147,13 @@ func (h *MediaType) PUT_MediaType(c *gin.Context) {
 func (h *MediaType) DEL_MediaTypeById(c *gin.Context) {
 	mediaType_id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	err = h.s.MediaType.Delete(mediaType_id)
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 

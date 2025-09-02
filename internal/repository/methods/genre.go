@@ -42,6 +42,9 @@ func (m *GenreDB) Get() (*[]models.Genre, error) {
 			&genre.GenreId,
 			&genre.Name,
 		); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
 			return nil, err
 		}
 		results = append(results, genre)
@@ -69,6 +72,9 @@ func (m *GenreDB) GetById(id int) (*models.Genre, error) {
 		&results.GenreId,
 		&results.Name,
 	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 

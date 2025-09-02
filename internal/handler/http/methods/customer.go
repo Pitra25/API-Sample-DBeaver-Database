@@ -30,7 +30,10 @@ func NewCustomerHandler(service *service.Service) *Customer {
 func (h *Customer) GET_Customers(c *gin.Context) {
 	result, err := h.s.Customer.Get()
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "customers not found", messages.Error)
 		return
 	}
 
@@ -50,13 +53,16 @@ func (h *Customer) GET_Customers(c *gin.Context) {
 func (h *Customer) GET_CustomerById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.Customer.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "customer not found", messages.Error)
 		return
 	}
 
@@ -77,13 +83,13 @@ func (h *Customer) GET_CustomerById(c *gin.Context) {
 func (h *Customer) POST_Customer(c *gin.Context) {
 	var customer models.CustomerInput
 	if err := c.BindJSON(&customer); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.Customer.Create(&customer)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -108,18 +114,18 @@ func (h *Customer) POST_Customer(c *gin.Context) {
 func (h *Customer) PUT_Customer(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	var customer models.CustomerInput
 	if err := c.BindJSON(&customer); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	if err := h.s.Customer.Put(&customer, id); err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -140,13 +146,13 @@ func (h *Customer) PUT_Customer(c *gin.Context) {
 func (h *Customer) DEL_CustomerById(c *gin.Context) {
 	customer_id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	err = h.s.Customer.Delete(customer_id)
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 

@@ -28,9 +28,13 @@ func NewInvoiceHandler(service *service.Service) *Invoice {
 // @Failure 500 {object} messages.Message "Internal server error"
 // @Router /invoices [get]
 func (h *Invoice) GET_Invoices(c *gin.Context) {
+
 	result, err := h.s.Invoice.Get()
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "invoices not found", messages.Error)
 		return
 	}
 
@@ -50,13 +54,16 @@ func (h *Invoice) GET_Invoices(c *gin.Context) {
 func (h *Invoice) GET_InvoiceById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.Invoice.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "invoice not found", messages.Error)
 		return
 	}
 
@@ -77,13 +84,13 @@ func (h *Invoice) GET_InvoiceById(c *gin.Context) {
 func (h *Invoice) POST_Invoice(c *gin.Context) {
 	var invoice models.InvoiceInput
 	if err := c.BindJSON(&invoice); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.Invoice.Create(&invoice)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -108,18 +115,18 @@ func (h *Invoice) POST_Invoice(c *gin.Context) {
 func (h *Invoice) PUT_Invoice(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	var invoice models.InvoiceInput
 	if err := c.BindJSON(&invoice); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	if err := h.s.Invoice.Put(&invoice, id); err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -140,13 +147,13 @@ func (h *Invoice) PUT_Invoice(c *gin.Context) {
 func (h *Invoice) DEL_InvoiceById(c *gin.Context) {
 	invoice_id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	err = h.s.Invoice.Delete(invoice_id)
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 

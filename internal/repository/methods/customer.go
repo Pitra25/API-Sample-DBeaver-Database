@@ -7,8 +7,6 @@ import (
 	"strings"
 
 	"database/sql"
-
-	"github.com/sirupsen/logrus"
 )
 
 type CustomerDB struct {
@@ -77,9 +75,6 @@ func (m *CustomerDB) GetById(id int) (*models.Customer, error) {
 		"SELECT * FROM %s WHERE CustomerId = ?",
 		models.CustomerTable,
 	)
-
-	logrus.Debugf("Query: %s", query)
-	logrus.Debugf("ID: %d", id)
 
 	var results models.Customer
 	if err := m.db.QueryRow(query, id).Scan(

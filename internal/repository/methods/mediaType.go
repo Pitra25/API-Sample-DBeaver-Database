@@ -42,6 +42,9 @@ func (m *MediaTypeDB) Get() (*[]models.MediaType, error) {
 			&mediaType.MediaTypeId,
 			&mediaType.Name,
 		); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
 			return nil, err
 		}
 		results = append(results, mediaType)
@@ -69,6 +72,9 @@ func (m *MediaTypeDB) GetById(id int) (*models.MediaType, error) {
 		&results.MediaTypeId,
 		&results.Name,
 	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 

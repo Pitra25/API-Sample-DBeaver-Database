@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 // swagger:ignore
@@ -31,7 +30,7 @@ func NewArtistHandler(service *service.Service) *Artist {
 func (h *Artist) GET_Artists(c *gin.Context) {
 	result, err := h.s.Artist.Get()
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -52,24 +51,18 @@ func (h *Artist) GET_ArtistsById(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 	}
 
 	result, err := h.s.Artist.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "artists not found", messages.Error)
+		return
 	}
 
-	if result != nil {
-		logrus.Debug("Artist found")
-		c.JSON(http.StatusOK, result)
-	} else if result == nil && err == nil {
-		logrus.Debug("Artist not found")
-		c.JSON(http.StatusNotFound, "Artist not found")
-	} else {
-		logrus.Debug("Internal server error")
-		c.JSON(http.StatusInternalServerError, "Internal server error")
-	}
+	c.JSON(http.StatusOK, result)
 }
 
 // GET_ArtistById retrieves artist by ID (singular version)
@@ -85,13 +78,16 @@ func (h *Artist) GET_ArtistsById(c *gin.Context) {
 func (h *Artist) GET_ArtistById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.Artist.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "artist not found", messages.Error)
 		return
 	}
 
@@ -112,13 +108,13 @@ func (h *Artist) GET_ArtistById(c *gin.Context) {
 func (h *Artist) POST_Artist(c *gin.Context) {
 	var artist models.ArtistInput
 	if err := c.BindJSON(&artist); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.Artist.Create(&artist)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -143,18 +139,18 @@ func (h *Artist) POST_Artist(c *gin.Context) {
 func (h *Artist) PUT_Artist(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	var artist models.ArtistInput
 	if err := c.BindJSON(&artist); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	if err := h.s.Artist.Put(&artist, id); err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -175,13 +171,13 @@ func (h *Artist) PUT_Artist(c *gin.Context) {
 func (h *Artist) DEL_ArtistById(c *gin.Context) {
 	artist_id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	err = h.s.Artist.Delete(artist_id)
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 

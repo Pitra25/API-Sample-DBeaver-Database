@@ -28,9 +28,13 @@ func NewGenreHandler(service *service.Service) *Genre {
 // @Failure 500 {object} messages.Message "Internal server error"
 // @Router /genres [get]
 func (h *Genre) GET_Genres(c *gin.Context) {
+
 	result, err := h.s.Genre.Get()
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "genre not found", messages.Error)
 		return
 	}
 
@@ -50,13 +54,16 @@ func (h *Genre) GET_Genres(c *gin.Context) {
 func (h *Genre) GET_GenreById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	result, err := h.s.Genre.GetById(id)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
+		return
+	} else if result == nil {
+		messages.New(c, http.StatusNotFound, "genre not found", messages.Error)
 		return
 	}
 
@@ -77,13 +84,13 @@ func (h *Genre) GET_GenreById(c *gin.Context) {
 func (h *Genre) POST_Genre(c *gin.Context) {
 	var genre models.GenreInput
 	if err := c.BindJSON(&genre); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	id, err := h.s.Genre.Create(&genre)
 	if err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -108,18 +115,18 @@ func (h *Genre) POST_Genre(c *gin.Context) {
 func (h *Genre) PUT_Genre(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	var genre models.GenreInput
 	if err := c.BindJSON(&genre); err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	if err := h.s.Genre.Put(&genre, id); err != nil {
-		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusInternalServerError, err.Error(), messages.Error)
 		return
 	}
 
@@ -140,13 +147,13 @@ func (h *Genre) PUT_Genre(c *gin.Context) {
 func (h *Genre) DEL_GenreById(c *gin.Context) {
 	genre_id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 
 	err = h.s.Genre.Delete(genre_id)
 	if err != nil {
-		messages.New(c, http.StatusBadRequest, err.Error(), messages.Fatal)
+		messages.New(c, http.StatusBadRequest, err.Error(), messages.Error)
 		return
 	}
 

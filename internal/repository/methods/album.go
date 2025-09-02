@@ -48,6 +48,9 @@ func (m *AlbumDB) Get() (*[]models.Album, error) {
 			&album.Title,
 			&album.ArtistId,
 		); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
 			return nil, err
 		}
 		results = append(results, album)
@@ -78,7 +81,7 @@ func (m *AlbumDB) GetById(id int) (*models.Album, error) {
 		&results.ArtistId,
 	); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("album not found")
+			return nil, nil
 		}
 		return nil, err
 	}
@@ -103,6 +106,9 @@ func (m *AlbumDB) GetByName(title *string) (*models.Album, error) {
 		&results.Title,
 		&results.ArtistId,
 	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 

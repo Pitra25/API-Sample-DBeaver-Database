@@ -49,6 +49,9 @@ func (m *TrackDB) Get() (*[]models.Track, error) {
 			&track.Bytes,
 			&track.UnitPrice,
 		); err != nil {
+			if err == sql.ErrNoRows {
+				return nil, nil
+			}
 			return nil, err
 		}
 		results = append(results, track)
@@ -83,6 +86,9 @@ func (m *TrackDB) GetById(id int) (*models.Track, error) {
 		&results.Bytes,
 		&results.UnitPrice,
 	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 
