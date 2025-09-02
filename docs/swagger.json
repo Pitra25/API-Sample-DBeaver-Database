@@ -1,0 +1,2483 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/albums": {
+            "get": {
+                "description": "Returns a list of all albums in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Get all albums",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Album"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new album with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Create new album",
+                "parameters": [
+                    {
+                        "description": "Album data",
+                        "name": "album",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AlbumInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "id",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/albums/{id}": {
+            "get": {
+                "description": "Returns album by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Get album by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Album ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Album"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Album not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates album by ID with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Update album",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Album ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated album data",
+                        "name": "album",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AlbumInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated album",
+                        "schema": {
+                            "$ref": "#/definitions/http_m.Album"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Album not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Update error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes album by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Delete album",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Album ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Album successfully deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Album not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Deletion error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/albums/{id}/track": {
+            "get": {
+                "description": "Returns track by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Get track album by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Track ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Found track",
+                        "schema": {
+                            "$ref": "#/definitions/models.Track"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Track not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new track with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Create new track album by id",
+                "parameters": [
+                    {
+                        "description": "Track data",
+                        "name": "track",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.TrackInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created track",
+                        "schema": {
+                            "$ref": "#/definitions/http_m.Track"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/artist/{id}": {
+            "get": {
+                "description": "Returns artist by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Get artist by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Artist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Artist"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Artist not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/artists": {
+            "get": {
+                "description": "Returns a list of all artists in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Get all artists",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Artist"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new artist with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Create new artist",
+                "parameters": [
+                    {
+                        "description": "Artist data",
+                        "name": "artist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http_m.Artist"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "id",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/artists/{id}": {
+            "get": {
+                "description": "Returns artists by specified ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Get artists by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Artist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Artist"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Artist not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates artist by ID with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Update artist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Artist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated artist data",
+                        "name": "artist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ArtistInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated artist",
+                        "schema": {
+                            "$ref": "#/definitions/http_m.Artist"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Artist not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Update error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes artist by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Delete artist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Artist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Artist successfully deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Artist not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Deletion error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers": {
+            "get": {
+                "description": "Returns a list of all customers in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "summary": "Get all customers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Customer"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new customer with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "summary": "Create new customer",
+                "parameters": [
+                    {
+                        "description": "Customer data",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CustomerInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "id",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/{id}": {
+            "get": {
+                "description": "Returns customer by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "summary": "Get customer by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Found customer",
+                        "schema": {
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates customer by ID with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "summary": "Update customer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated customer data",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CustomerInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated customer",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Update error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes customer by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "summary": "Delete customer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Customer successfully deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Deletion error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/employees": {
+            "get": {
+                "description": "Returns a list of all employees in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "employees"
+                ],
+                "summary": "Get all employees",
+                "responses": {
+                    "200": {
+                        "description": "List of employees",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Employee"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new employee with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "employees"
+                ],
+                "summary": "Create new employee",
+                "parameters": [
+                    {
+                        "description": "Employee data",
+                        "name": "employee",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.EmployeeInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "id",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/employees/{id}": {
+            "get": {
+                "description": "Returns employee by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "employees"
+                ],
+                "summary": "Get employee by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Found employee",
+                        "schema": {
+                            "$ref": "#/definitions/models.Employee"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Employee not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates employee by ID with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "employees"
+                ],
+                "summary": "Update employee",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated employee data",
+                        "name": "employee",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.EmployeeInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated employee",
+                        "schema": {
+                            "$ref": "#/definitions/http_m.Employee"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Employee not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Update error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes employee by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "employees"
+                ],
+                "summary": "Delete employee",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Employee successfully deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Employee not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Deletion error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/genres": {
+            "get": {
+                "description": "Returns a list of all genres in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Get all genres",
+                "responses": {
+                    "200": {
+                        "description": "List of genres",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Genre"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new genre with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Create new genre",
+                "parameters": [
+                    {
+                        "description": "Genre data",
+                        "name": "genre",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GenreInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "id",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/genres/{id}": {
+            "get": {
+                "description": "Returns genre by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Get genre by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Genre ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Found genre",
+                        "schema": {
+                            "$ref": "#/definitions/models.Genre"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Genre not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates genre by ID with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Update genre",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Genre ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated genre data",
+                        "name": "genre",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GenreInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated genre",
+                        "schema": {
+                            "$ref": "#/definitions/http_m.Genre"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Genre not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Update error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes genre by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Delete genre",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Genre ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Genre successfully deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Genre not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Deletion error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/invoices": {
+            "get": {
+                "description": "Returns a list of all invoices in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "invoices"
+                ],
+                "summary": "Get all invoices",
+                "responses": {
+                    "200": {
+                        "description": "List of invoices",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Invoice"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new invoice with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "invoices"
+                ],
+                "summary": "Create new invoice",
+                "parameters": [
+                    {
+                        "description": "Invoice data",
+                        "name": "invoice",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.InvoiceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "id",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/invoices/{id}": {
+            "get": {
+                "description": "Returns invoice by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "invoices"
+                ],
+                "summary": "Get invoice by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Invoice ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Found invoice",
+                        "schema": {
+                            "$ref": "#/definitions/models.Invoice"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Invoice not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates invoice by ID with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "invoices"
+                ],
+                "summary": "Update invoice",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Invoice ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated invoice data",
+                        "name": "invoice",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.InvoiceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated invoice",
+                        "schema": {
+                            "$ref": "#/definitions/http_m.Invoice"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Invoice not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Update error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes invoice by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "invoices"
+                ],
+                "summary": "Delete invoice",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Invoice ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Invoice successfully deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Invoice not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Deletion error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/mediaTypes": {
+            "get": {
+                "description": "Returns a list of all media types in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "media-types"
+                ],
+                "summary": "Get all media types",
+                "responses": {
+                    "200": {
+                        "description": "List of media types",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.MediaType"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new media type with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "media-types"
+                ],
+                "summary": "Create new media type",
+                "parameters": [
+                    {
+                        "description": "Media type data",
+                        "name": "mediaType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MediaTypeInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "id",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/mediaTypes/{id}": {
+            "get": {
+                "description": "Returns media type by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "media-types"
+                ],
+                "summary": "Get media type by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Media Type ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Found media type",
+                        "schema": {
+                            "$ref": "#/definitions/models.MediaType"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Media type not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates media type by ID with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "media-types"
+                ],
+                "summary": "Update media type",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Media Type ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated media type data",
+                        "name": "mediaType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MediaTypeInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated media type",
+                        "schema": {
+                            "$ref": "#/definitions/http_m.MediaType"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Media type not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Update error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes media type by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "media-types"
+                ],
+                "summary": "Delete media type",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Media Type ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Media type successfully deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Media type not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Deletion error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/playlists": {
+            "get": {
+                "description": "Returns a list of all playlists in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "playlists"
+                ],
+                "summary": "Get all playlists",
+                "responses": {
+                    "200": {
+                        "description": "List of playlists",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Playlist"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new playlist with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "playlists"
+                ],
+                "summary": "Create new playlist",
+                "parameters": [
+                    {
+                        "description": "Playlist data",
+                        "name": "playlist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PlaylistInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "id",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/playlists/{id}": {
+            "get": {
+                "description": "Returns playlist by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "playlists"
+                ],
+                "summary": "Get playlist by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Playlist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Found playlist",
+                        "schema": {
+                            "$ref": "#/definitions/models.Playlist"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Playlist not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates playlist by ID with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "playlists"
+                ],
+                "summary": "Update playlist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Playlist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated playlist data",
+                        "name": "playlist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PlaylistInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Updated playlist"
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Playlist not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Update error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes playlist by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "playlists"
+                ],
+                "summary": "Delete playlist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Playlist ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Playlist type successfully deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Playlist not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Deletion error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/tracks": {
+            "get": {
+                "description": "Returns a list of all tracks in the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tracks"
+                ],
+                "summary": "Get all tracks",
+                "responses": {
+                    "200": {
+                        "description": "List of tracks",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Track"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new track with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tracks"
+                ],
+                "summary": "Create new track",
+                "parameters": [
+                    {
+                        "description": "Track data",
+                        "name": "track",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.TrackInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "id",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Creation error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        },
+        "/tracks/{id}": {
+            "get": {
+                "description": "Returns track by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tracks"
+                ],
+                "summary": "Get track by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Track ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Found track",
+                        "schema": {
+                            "$ref": "#/definitions/models.Track"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Track not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates track by ID with provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tracks"
+                ],
+                "summary": "Update track",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Track ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated track data",
+                        "name": "track",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.TrackInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated track",
+                        "schema": {
+                            "$ref": "#/definitions/http_m.Track"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Track not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Update error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes track by specified identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tracks"
+                ],
+                "summary": "Delete track",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Track ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Track successfully deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "404": {
+                        "description": "Track not found",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    },
+                    "500": {
+                        "description": "Deletion error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Message"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Album": {
+            "type": "object",
+            "properties": {
+                "AlbumId": {
+                    "type": "integer"
+                },
+                "ArtistId": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AlbumInput": {
+            "type": "object",
+            "properties": {
+                "ArtistId": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Artist": {
+            "type": "object",
+            "properties": {
+                "artistId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ArtistInput": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Customer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "company": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fax": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "postalCode": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "supportRepId": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.CustomerInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstName",
+                "lastName"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "company": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fax": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "postalCode": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "supportRepId": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Employee": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "birthDate": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "employeeId": {
+                    "type": "integer"
+                },
+                "fax": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "hireDate": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "postalCode": {
+                    "type": "string"
+                },
+                "reportsTo": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.EmployeeInput": {
+            "type": "object",
+            "required": [
+                "firstName",
+                "lastName"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "birthDate": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fax": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "hireDate": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "postalCode": {
+                    "type": "string"
+                },
+                "reportsTo": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Genre": {
+            "type": "object",
+            "properties": {
+                "genreId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.GenreInput": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Invoice": {
+            "type": "object",
+            "properties": {
+                "billingAddress": {
+                    "type": "string"
+                },
+                "billingCity": {
+                    "type": "string"
+                },
+                "billingCountry": {
+                    "type": "string"
+                },
+                "billingPostalCode": {
+                    "type": "string"
+                },
+                "billingState": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "integer"
+                },
+                "invoiceDate": {
+                    "type": "string"
+                },
+                "invoiceId": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.InvoiceInput": {
+            "type": "object",
+            "required": [
+                "customerId",
+                "total"
+            ],
+            "properties": {
+                "billingAddress": {
+                    "type": "string"
+                },
+                "billingCity": {
+                    "type": "string"
+                },
+                "billingCountry": {
+                    "type": "string"
+                },
+                "billingPostalCode": {
+                    "type": "string"
+                },
+                "billingState": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "integer"
+                },
+                "invoiceDate": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.MediaType": {
+            "type": "object",
+            "properties": {
+                "mediaTypeId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.MediaTypeInput": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Playlist": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "playlistId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.PlaylistInput": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Track": {
+            "type": "object",
+            "properties": {
+                "albumId": {
+                    "type": "integer"
+                },
+                "bytes": {
+                    "type": "integer"
+                },
+                "composer": {
+                    "type": "string"
+                },
+                "genreId": {
+                    "type": "integer"
+                },
+                "mediaTypeId": {
+                    "type": "integer"
+                },
+                "milliseconds": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "trackId": {
+                    "type": "integer"
+                },
+                "unitPrice": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.TrackInput": {
+            "type": "object",
+            "required": [
+                "mediaTypeId",
+                "milliseconds",
+                "name",
+                "unitPrice"
+            ],
+            "properties": {
+                "albumId": {
+                    "type": "integer"
+                },
+                "bytes": {
+                    "type": "integer"
+                },
+                "composer": {
+                    "type": "string"
+                },
+                "genreId": {
+                    "type": "integer"
+                },
+                "mediaTypeId": {
+                    "type": "integer"
+                },
+                "milliseconds": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "unitPrice": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

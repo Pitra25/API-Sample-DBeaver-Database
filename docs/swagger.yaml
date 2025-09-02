@@ -1,0 +1,1645 @@
+definitions:
+  messages.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Album:
+    properties:
+      AlbumId:
+        type: integer
+      ArtistId:
+        type: integer
+      Title:
+        type: string
+    type: object
+  models.AlbumInput:
+    properties:
+      ArtistId:
+        type: integer
+      Title:
+        type: string
+    type: object
+  models.Artist:
+    properties:
+      artistId:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.ArtistInput:
+    properties:
+      name:
+        type: string
+    type: object
+  models.Customer:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      company:
+        type: string
+      country:
+        type: string
+      customerId:
+        type: integer
+      email:
+        type: string
+      fax:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      postalCode:
+        type: string
+      state:
+        type: string
+      supportRepId:
+        type: string
+    type: object
+  models.CustomerInput:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      company:
+        type: string
+      country:
+        type: string
+      email:
+        type: string
+      fax:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      postalCode:
+        type: string
+      state:
+        type: string
+      supportRepId:
+        type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    type: object
+  models.Employee:
+    properties:
+      address:
+        type: string
+      birthDate:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      email:
+        type: string
+      employeeId:
+        type: integer
+      fax:
+        type: string
+      firstName:
+        type: string
+      hireDate:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      postalCode:
+        type: string
+      reportsTo:
+        type: integer
+      state:
+        type: string
+      title:
+        type: string
+    type: object
+  models.EmployeeInput:
+    properties:
+      address:
+        type: string
+      birthDate:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      email:
+        type: string
+      fax:
+        type: string
+      firstName:
+        type: string
+      hireDate:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      postalCode:
+        type: string
+      reportsTo:
+        type: integer
+      state:
+        type: string
+      title:
+        type: string
+    required:
+    - firstName
+    - lastName
+    type: object
+  models.Genre:
+    properties:
+      genreId:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.GenreInput:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  models.Invoice:
+    properties:
+      billingAddress:
+        type: string
+      billingCity:
+        type: string
+      billingCountry:
+        type: string
+      billingPostalCode:
+        type: string
+      billingState:
+        type: string
+      customerId:
+        type: integer
+      invoiceDate:
+        type: string
+      invoiceId:
+        type: integer
+      total:
+        type: string
+    type: object
+  models.InvoiceInput:
+    properties:
+      billingAddress:
+        type: string
+      billingCity:
+        type: string
+      billingCountry:
+        type: string
+      billingPostalCode:
+        type: string
+      billingState:
+        type: string
+      customerId:
+        type: integer
+      invoiceDate:
+        type: string
+      total:
+        type: string
+    required:
+    - customerId
+    - total
+    type: object
+  models.MediaType:
+    properties:
+      mediaTypeId:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.MediaTypeInput:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  models.Playlist:
+    properties:
+      name:
+        type: string
+      playlistId:
+        type: integer
+    type: object
+  models.PlaylistInput:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  models.Track:
+    properties:
+      albumId:
+        type: integer
+      bytes:
+        type: integer
+      composer:
+        type: string
+      genreId:
+        type: integer
+      mediaTypeId:
+        type: integer
+      milliseconds:
+        type: integer
+      name:
+        type: string
+      trackId:
+        type: integer
+      unitPrice:
+        type: integer
+    type: object
+  models.TrackInput:
+    properties:
+      albumId:
+        type: integer
+      bytes:
+        type: integer
+      composer:
+        type: string
+      genreId:
+        type: integer
+      mediaTypeId:
+        type: integer
+      milliseconds:
+        type: integer
+      name:
+        type: string
+      unitPrice:
+        type: integer
+    required:
+    - mediaTypeId
+    - milliseconds
+    - name
+    - unitPrice
+    type: object
+info:
+  contact: {}
+paths:
+  /albums:
+    get:
+      description: Returns a list of all albums in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Album'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get all albums
+      tags:
+      - albums
+    post:
+      consumes:
+      - application/json
+      description: Creates a new album with provided data
+      parameters:
+      - description: Album data
+        in: body
+        name: album
+        required: true
+        schema:
+          $ref: '#/definitions/models.AlbumInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: id
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new album
+      tags:
+      - albums
+  /albums/{id}:
+    delete:
+      description: Deletes album by specified identifier
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Album successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Album not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Deletion error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Delete album
+      tags:
+      - albums
+    get:
+      description: Returns album by specified identifier
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Album'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Album not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get album by ID
+      tags:
+      - albums
+    put:
+      consumes:
+      - application/json
+      description: Updates album by ID with provided data
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated album data
+        in: body
+        name: album
+        required: true
+        schema:
+          $ref: '#/definitions/models.AlbumInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated album
+          schema:
+            $ref: '#/definitions/http_m.Album'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Album not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Update error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Update album
+      tags:
+      - albums
+  /albums/{id}/track:
+    get:
+      description: Returns track by specified identifier
+      parameters:
+      - description: Track ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Found track
+          schema:
+            $ref: '#/definitions/models.Track'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Track not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get track album by ID
+      tags:
+      - albums
+    post:
+      consumes:
+      - application/json
+      description: Creates a new track with provided data
+      parameters:
+      - description: Track data
+        in: body
+        name: track
+        required: true
+        schema:
+          $ref: '#/definitions/models.TrackInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created track
+          schema:
+            $ref: '#/definitions/http_m.Track'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new track album by id
+      tags:
+      - albums
+  /artist/{id}:
+    get:
+      description: Returns artist by specified identifier
+      parameters:
+      - description: Artist ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Artist'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Artist not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get artist by ID
+      tags:
+      - artists
+  /artists:
+    get:
+      description: Returns a list of all artists in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Artist'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get all artists
+      tags:
+      - artists
+    post:
+      consumes:
+      - application/json
+      description: Creates a new artist with provided data
+      parameters:
+      - description: Artist data
+        in: body
+        name: artist
+        required: true
+        schema:
+          $ref: '#/definitions/http_m.Artist'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: id
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new artist
+      tags:
+      - artists
+  /artists/{id}:
+    delete:
+      description: Deletes artist by specified identifier
+      parameters:
+      - description: Artist ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Artist successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Artist not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Deletion error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Delete artist
+      tags:
+      - artists
+    get:
+      description: Returns artists by specified ID
+      parameters:
+      - description: Artist ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Artist'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Artist not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get artists by ID
+      tags:
+      - artists
+    put:
+      consumes:
+      - application/json
+      description: Updates artist by ID with provided data
+      parameters:
+      - description: Artist ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated artist data
+        in: body
+        name: artist
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArtistInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated artist
+          schema:
+            $ref: '#/definitions/http_m.Artist'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Artist not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Update error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Update artist
+      tags:
+      - artists
+  /customers:
+    get:
+      description: Returns a list of all customers in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Customer'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get all customers
+      tags:
+      - customers
+    post:
+      consumes:
+      - application/json
+      description: Creates a new customer with provided data
+      parameters:
+      - description: Customer data
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/models.CustomerInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: id
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new customer
+      tags:
+      - customers
+  /customers/{id}:
+    delete:
+      description: Deletes customer by specified identifier
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Customer successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Customer not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Deletion error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Delete customer
+      tags:
+      - customers
+    get:
+      description: Returns customer by specified identifier
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Found customer
+          schema:
+            $ref: '#/definitions/models.Customer'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Customer not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get customer by ID
+      tags:
+      - customers
+    put:
+      consumes:
+      - application/json
+      description: Updates customer by ID with provided data
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated customer data
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/models.CustomerInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated customer
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Customer not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Update error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Update customer
+      tags:
+      - customers
+  /employees:
+    get:
+      description: Returns a list of all employees in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of employees
+          schema:
+            items:
+              $ref: '#/definitions/models.Employee'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get all employees
+      tags:
+      - employees
+    post:
+      consumes:
+      - application/json
+      description: Creates a new employee with provided data
+      parameters:
+      - description: Employee data
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/models.EmployeeInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: id
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new employee
+      tags:
+      - employees
+  /employees/{id}:
+    delete:
+      description: Deletes employee by specified identifier
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Employee successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Employee not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Deletion error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Delete employee
+      tags:
+      - employees
+    get:
+      description: Returns employee by specified identifier
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Found employee
+          schema:
+            $ref: '#/definitions/models.Employee'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Employee not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get employee by ID
+      tags:
+      - employees
+    put:
+      consumes:
+      - application/json
+      description: Updates employee by ID with provided data
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated employee data
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/models.EmployeeInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated employee
+          schema:
+            $ref: '#/definitions/http_m.Employee'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Employee not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Update error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Update employee
+      tags:
+      - employees
+  /genres:
+    get:
+      description: Returns a list of all genres in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of genres
+          schema:
+            items:
+              $ref: '#/definitions/models.Genre'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get all genres
+      tags:
+      - genres
+    post:
+      consumes:
+      - application/json
+      description: Creates a new genre with provided data
+      parameters:
+      - description: Genre data
+        in: body
+        name: genre
+        required: true
+        schema:
+          $ref: '#/definitions/models.GenreInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: id
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new genre
+      tags:
+      - genres
+  /genres/{id}:
+    delete:
+      description: Deletes genre by specified identifier
+      parameters:
+      - description: Genre ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Genre successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Genre not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Deletion error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Delete genre
+      tags:
+      - genres
+    get:
+      description: Returns genre by specified identifier
+      parameters:
+      - description: Genre ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Found genre
+          schema:
+            $ref: '#/definitions/models.Genre'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Genre not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get genre by ID
+      tags:
+      - genres
+    put:
+      consumes:
+      - application/json
+      description: Updates genre by ID with provided data
+      parameters:
+      - description: Genre ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated genre data
+        in: body
+        name: genre
+        required: true
+        schema:
+          $ref: '#/definitions/models.GenreInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated genre
+          schema:
+            $ref: '#/definitions/http_m.Genre'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Genre not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Update error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Update genre
+      tags:
+      - genres
+  /invoices:
+    get:
+      description: Returns a list of all invoices in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of invoices
+          schema:
+            items:
+              $ref: '#/definitions/models.Invoice'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get all invoices
+      tags:
+      - invoices
+    post:
+      consumes:
+      - application/json
+      description: Creates a new invoice with provided data
+      parameters:
+      - description: Invoice data
+        in: body
+        name: invoice
+        required: true
+        schema:
+          $ref: '#/definitions/models.InvoiceInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: id
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new invoice
+      tags:
+      - invoices
+  /invoices/{id}:
+    delete:
+      description: Deletes invoice by specified identifier
+      parameters:
+      - description: Invoice ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Invoice successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Invoice not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Deletion error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Delete invoice
+      tags:
+      - invoices
+    get:
+      description: Returns invoice by specified identifier
+      parameters:
+      - description: Invoice ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Found invoice
+          schema:
+            $ref: '#/definitions/models.Invoice'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Invoice not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get invoice by ID
+      tags:
+      - invoices
+    put:
+      consumes:
+      - application/json
+      description: Updates invoice by ID with provided data
+      parameters:
+      - description: Invoice ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated invoice data
+        in: body
+        name: invoice
+        required: true
+        schema:
+          $ref: '#/definitions/models.InvoiceInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated invoice
+          schema:
+            $ref: '#/definitions/http_m.Invoice'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Invoice not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Update error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Update invoice
+      tags:
+      - invoices
+  /mediaTypes:
+    get:
+      description: Returns a list of all media types in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of media types
+          schema:
+            items:
+              $ref: '#/definitions/models.MediaType'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get all media types
+      tags:
+      - media-types
+    post:
+      consumes:
+      - application/json
+      description: Creates a new media type with provided data
+      parameters:
+      - description: Media type data
+        in: body
+        name: mediaType
+        required: true
+        schema:
+          $ref: '#/definitions/models.MediaTypeInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: id
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new media type
+      tags:
+      - media-types
+  /mediaTypes/{id}:
+    delete:
+      description: Deletes media type by specified identifier
+      parameters:
+      - description: Media Type ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Media type successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Media type not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Deletion error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Delete media type
+      tags:
+      - media-types
+    get:
+      description: Returns media type by specified identifier
+      parameters:
+      - description: Media Type ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Found media type
+          schema:
+            $ref: '#/definitions/models.MediaType'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Media type not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get media type by ID
+      tags:
+      - media-types
+    put:
+      consumes:
+      - application/json
+      description: Updates media type by ID with provided data
+      parameters:
+      - description: Media Type ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated media type data
+        in: body
+        name: mediaType
+        required: true
+        schema:
+          $ref: '#/definitions/models.MediaTypeInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated media type
+          schema:
+            $ref: '#/definitions/http_m.MediaType'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Media type not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Update error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Update media type
+      tags:
+      - media-types
+  /playlists:
+    get:
+      description: Returns a list of all playlists in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of playlists
+          schema:
+            items:
+              $ref: '#/definitions/models.Playlist'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get all playlists
+      tags:
+      - playlists
+    post:
+      consumes:
+      - application/json
+      description: Creates a new playlist with provided data
+      parameters:
+      - description: Playlist data
+        in: body
+        name: playlist
+        required: true
+        schema:
+          $ref: '#/definitions/models.PlaylistInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: id
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new playlist
+      tags:
+      - playlists
+  /playlists/{id}:
+    delete:
+      description: Deletes playlist by specified identifier
+      parameters:
+      - description: Playlist ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Playlist type successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Playlist not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Deletion error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Delete playlist
+      tags:
+      - playlists
+    get:
+      description: Returns playlist by specified identifier
+      parameters:
+      - description: Playlist ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Found playlist
+          schema:
+            $ref: '#/definitions/models.Playlist'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Playlist not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get playlist by ID
+      tags:
+      - playlists
+    put:
+      consumes:
+      - application/json
+      description: Updates playlist by ID with provided data
+      parameters:
+      - description: Playlist ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated playlist data
+        in: body
+        name: playlist
+        required: true
+        schema:
+          $ref: '#/definitions/models.PlaylistInput'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Updated playlist
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Playlist not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Update error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Update playlist
+      tags:
+      - playlists
+  /tracks:
+    get:
+      description: Returns a list of all tracks in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of tracks
+          schema:
+            items:
+              $ref: '#/definitions/models.Track'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get all tracks
+      tags:
+      - tracks
+    post:
+      consumes:
+      - application/json
+      description: Creates a new track with provided data
+      parameters:
+      - description: Track data
+        in: body
+        name: track
+        required: true
+        schema:
+          $ref: '#/definitions/models.TrackInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: id
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Creation error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Create new track
+      tags:
+      - tracks
+  /tracks/{id}:
+    delete:
+      description: Deletes track by specified identifier
+      parameters:
+      - description: Track ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Track successfully deleted
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Track not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Deletion error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Delete track
+      tags:
+      - tracks
+    get:
+      description: Returns track by specified identifier
+      parameters:
+      - description: Track ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Found track
+          schema:
+            $ref: '#/definitions/models.Track'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Track not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Get track by ID
+      tags:
+      - tracks
+    put:
+      consumes:
+      - application/json
+      description: Updates track by ID with provided data
+      parameters:
+      - description: Track ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated track data
+        in: body
+        name: track
+        required: true
+        schema:
+          $ref: '#/definitions/models.TrackInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated track
+          schema:
+            $ref: '#/definitions/http_m.Track'
+        "400":
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "404":
+          description: Track not found
+          schema:
+            $ref: '#/definitions/messages.Message'
+        "500":
+          description: Update error
+          schema:
+            $ref: '#/definitions/messages.Message'
+      summary: Update track
+      tags:
+      - tracks
+swagger: "2.0"

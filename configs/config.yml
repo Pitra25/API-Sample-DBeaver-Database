@@ -1,0 +1,9 @@
+server:
+  host: "localhost"
+  port: "8000"
+  swagger_url: "swagger/docs/index.html"
+
+db:
+  name: "Chinook.db"
+  cache_size: 10000
+  journal_mode: "MAL"
